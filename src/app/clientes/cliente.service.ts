@@ -20,4 +20,8 @@ export class ClienteService {
       headers: this.httpHeaders,
     });
   }
+
+  getCliente(id): Observable<Cliente> {
+    return this.http.get<Cliente>(`${this.urlEndPoint}/${id}`);
+  }
 }
