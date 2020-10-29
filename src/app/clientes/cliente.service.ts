@@ -23,7 +23,13 @@ export class ClienteService {
   create(cliente: Cliente): Observable<Cliente> {
     return this.http.post<Cliente>(this.urlEndPoint, cliente, {
       headers: this.httpHeaders,
-    });
+    }).pipe(
+      catchError(e => {
+        console.error(e.error.mensaje);
+        Swal.fire(e.error.mensaje, e.error.error, 'error');
+        return throwError(e);
+      })
+    );
   }
 
   getCliente(id): Observable<Cliente> {
@@ -42,12 +48,26 @@ export class ClienteService {
       `${this.urlEndPoint}/${cliente.id}`,
       cliente,
       { headers: this.httpHeaders }
+    ).pipe(
+      catchError(e => {
+        this.router.navigate(['/clientes'])
+        console.error(e.error.mensaje);
+        Swal.fire(e.error.mensaje, e.error.error, 'error');
+        return throwError(e);
+      })
     );
   }
 
   delete(id: number): Observable<Cliente> {
     return this.http.delete<Cliente>(`${this.urlEndPoint}/${id}`, {
       headers: this.httpHeaders,
-    });
+    }).pipe(
+      catchError(e => {
+        this.router.navigate(['/clientes'])
+        console.error(e.error.mensaje);
+        Swal.fire(e.error.mensaje, e.error.error, 'error');
+        return throwError(e);
+      })
+    );
   }
 }
